@@ -25,7 +25,7 @@ public class SearchFilterTest extends AbstractTest {
     @DataProvider(name = "productsData")
     public Object[][] dataProducts() {
         return new Object[][]{
-                {"hair trimmer for sale | eBay", "hair trimmer", new BigDecimal(12.00)}
+                {"iphone for sale | eBay", "iphone", new BigDecimal(140.00)}
         };
     }
     @Test(testName = "verify Mixers is selected in the results", dataProvider = "mixersTitleText")
@@ -38,8 +38,10 @@ public class SearchFilterTest extends AbstractTest {
         ResultPage resultPage = searchBlock.clickSearchButton();
         List<String> names = resultPage.getResultsName();
         SoftAssert sa = new SoftAssert();
-        sa.assertTrue(restaurantFoodServicePage.getTitle(mixerTitle, 5), "The title is not expected");
-        names.forEach(name -> sa.assertTrue(name.contains(text.toLowerCase()), "The found item doesn't contain " + text + " word"));
+        sa.assertTrue(restaurantFoodServicePage.getTitle(mixerTitle, 5),
+                "The title is not expected");
+        names.forEach(name -> sa.assertTrue(name.contains(text.toLowerCase()),
+                "The found item doesn't contain " + text + " word"));
         sa.assertAll();
     }
 
@@ -53,9 +55,14 @@ public class SearchFilterTest extends AbstractTest {
         resultPage.selectCheckBoxByName("Under $" + cost);
         List<BigDecimal> prices = resultPage.getResultsPrice();
         SoftAssert sa = new SoftAssert();
-        names.forEach(name -> sa.assertTrue(name.contains("trimmer") || name.contains("hair"), "The found item doesn't contain " + text + " word"));
+        sa.assertTrue(resultPage.getTitle(titleText, 5), "The title is not expected");
+        names.forEach(name -> {
+            sa.assertTrue(name.contains(text),
+                    "The found item doesn't contain " + text + " word");
+        });
         prices.forEach(price -> {
-            sa.assertTrue(cost.compareTo(price)==-1, "The found item doesn't contain " + text + " word");
+            sa.assertTrue(cost.compareTo(price) > 0,
+                    "The price doesn't less " + cost + " $");
         });
         sa.assertAll();
     }

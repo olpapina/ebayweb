@@ -2,6 +2,7 @@ package com.solvd.ebayweb.page;
 
 import com.solvd.ebayweb.component.CheckBox;
 import com.solvd.ebayweb.component.ResultBlock;
+import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
@@ -15,7 +16,7 @@ public class ResultPage extends BasePage{
     @FindBy(xpath = "//*[@id='srp-river-results']//*[contains(@class,'s-item__info')]")
     private List<WebElement> resultBlocks;
 
-    @FindBy(xpath = "//*[@class='x-refine__multi-select']")
+    @FindBy(xpath = "//*[contains(@class,'x-refine__select__svg')]")
     private List<WebElement> checkBoxes;
 
     public ResultPage(WebDriver driver) {
@@ -42,11 +43,12 @@ public class ResultPage extends BasePage{
 
     public void selectCheckBoxByName(String name) {
 
-        checkBoxes.forEach(boxName -> {
-            CheckBox checkBox = new CheckBox(boxName);
-            if (checkBox.getName().contains(name)) {
-                checkBox.clickCheckBox(name);
+        for (int i =0; i < checkBoxes.size(); i++) {
+            CheckBox checkBox = new CheckBox(checkBoxes.get(i));
+            String selectedName = checkBox.getName();
+            if (selectedName.contains(name)) {
+                checkBox.clickCheckbox();
             }
-        });
+        }
     }
 }
