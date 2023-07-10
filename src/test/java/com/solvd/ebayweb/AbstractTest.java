@@ -3,10 +3,12 @@ package com.solvd.ebayweb;
 import com.solvd.ebayweb.utils.ConfigFileReader;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import org.openqa.selenium.Cookie;
 import org.openqa.selenium.OutputType;
 import org.openqa.selenium.TakesScreenshot;
 import org.apache.commons.io.FileUtils;
 import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.chrome.ChromeDriverService;
 import org.openqa.selenium.remote.RemoteWebDriver;
 import org.testng.ITestResult;
 import org.testng.annotations.AfterMethod;
@@ -20,6 +22,7 @@ import java.net.URL;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.Set;
 
 import static com.solvd.ebayweb.utils.PageFactory.getCapabilities;
 
@@ -30,10 +33,13 @@ public class AbstractTest {
     @BeforeMethod
     @Parameters({"browser"})
     public void beforeMethodSetup(String browser) throws MalformedURLException {
+        ChromeDriverService service = new ChromeDriverService.Builder()
+                .withLogOutput(System.out).build();
         WebDriver driver = new RemoteWebDriver(new URL(ConfigFileReader.getData("nodeUrl")), getCapabilities(browser));
         driver.get(ConfigFileReader.getData("baseUrl"));
         LOGGER.info("ebay.com is opening");
         webDriver.set(driver);
+        setCookie(driver);
     }
 
     public static void takeSnapShot(WebDriver webdriver, String fileWithPath) throws Exception {
@@ -57,5 +63,12 @@ public class AbstractTest {
 
     public WebDriver getWebdriver() {
         return webDriver.get();
+    }
+
+    public void setCookie(WebDriver driver) {
+        Set<Cookie> cookies = driver.manage().getCookies();
+        cookies.forEach(cookie -> {
+            driver.manage().addCookie(new Cookie(cookie.getName(), cookie.getValue()));
+        });
     }
 }
