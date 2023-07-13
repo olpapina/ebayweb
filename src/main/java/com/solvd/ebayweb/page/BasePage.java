@@ -13,6 +13,8 @@ import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
 
 import java.time.Duration;
+import java.util.Iterator;
+import java.util.Set;
 
 public abstract class BasePage {
     protected WebDriver driver;
@@ -75,5 +77,21 @@ public abstract class BasePage {
         WebElement ele = driver.findElement(By.xpath(String.valueOf(webElement)));
         Actions action = new Actions(driver);
         action.scrollToElement(webElement).perform();
+    }
+
+    public void switchToWindow() {
+        String parentWindow = driver.getWindowHandle();
+        Set<String> windowHandles = driver.getWindowHandles();
+        Iterator<String> iterator = windowHandles.iterator();
+        while (iterator.hasNext()) {
+            String childWindow = iterator.next();
+            if (!parentWindow.equalsIgnoreCase(childWindow)) {
+                driver.switchTo().window(childWindow);
+            }
+        }
+    }
+
+    public void clearField(WebElement webElement) {
+        webElement.clear();
     }
 }

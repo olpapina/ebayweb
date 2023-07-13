@@ -23,7 +23,7 @@ public class SearchBlock extends BasePage {
     }
 
     public void typeSearchText(String text) {
-        typeText(searchField, text, 10);
+        typeText(searchField, text, 5);
     }
 
     public ResultPage clickSearchButton() throws NotClickedException {

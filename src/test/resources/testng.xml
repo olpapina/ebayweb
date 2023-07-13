@@ -9,22 +9,28 @@
             <class name = "com.solvd.ebayweb.HomePageTest" />
         </classes>
     </test>
-    <test name = "ChromeTest - Search  and Filter tests" parallel="methods" thread-count="1">
+    <test name = "ChromeTest - Search and Filter tests" parallel="methods" thread-count="2">
         <parameter name="browser" value="chrome"/>
         <classes>
             <class name = "com.solvd.ebayweb.SearchFilterTest" />
         </classes>
     </test>
-<!--    <test name = "FirefoxTest - Home page tests" parallel="methods" thread-count="2">-->
+    <test name = "ChromeTest - Add to cart tests" parallel="methods" thread-count="1">
+        <parameter name="browser" value="chrome"/>
+        <classes>
+            <class name = "com.solvd.ebayweb.AddToCartTest" />
+        </classes>
+    </test>
+<!--    <test name = "FirefoxTest - Home page tests" parallel="methods" thread-count="3">-->
 <!--        <parameter name="browser" value="firefox"/>-->
 <!--        <classes>-->
 <!--            <class name = "com.solvd.ebayweb.HomePageTest" />-->
 <!--        </classes>-->
 <!--    </test>-->
-<!--    <test name = "FirefoxTest - Search test" parallel="methods" thread-count="4">-->
+<!--    <test name = "FirefoxTest - Search and Filter tests" parallel="methods" thread-count="2">-->
 <!--        <parameter name="browser" value="firefox"/>-->
 <!--        <classes>-->
-<!--            <class name = "com.solvd.eshop.SearchTest" />-->
+<!--            <class name = "com.solvd.ebayweb.SearchFilterTest" />-->
 <!--        </classes>-->
 <!--    </test>-->
 

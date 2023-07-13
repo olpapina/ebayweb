@@ -25,6 +25,6 @@ public class ResultBlock extends BaseComponent {
     }
 
     public void clickProduct() {
-        root.findElement(By.id("s-item__title")).click();
+        root.findElement(By.className("s-item__title")).click();
     }
 }

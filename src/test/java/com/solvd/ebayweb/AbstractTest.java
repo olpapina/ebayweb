@@ -26,7 +26,7 @@ import java.util.Set;
 
 import static com.solvd.ebayweb.utils.PageFactory.getCapabilities;
 
-public class AbstractTest {
+public abstract class AbstractTest {
     private static final Logger LOGGER = LogManager.getLogger(AbstractTest.class);
     private static final ThreadLocal<WebDriver> webDriver= new ThreadLocal<>();
 
