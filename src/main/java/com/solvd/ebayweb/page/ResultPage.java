@@ -2,7 +2,6 @@ package com.solvd.ebayweb.page;
 
 import com.solvd.ebayweb.component.CheckBox;
 import com.solvd.ebayweb.component.ResultBlock;
-import com.solvd.ebayweb.exception.NotClickedException;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
@@ -18,6 +17,9 @@ public class ResultPage extends BasePage{
 
     @FindBy(xpath = "//*[contains(@class,'x-refine__select__svg')]")
     private List<WebElement> checkBoxes;
+
+    @FindBy(css = "#gh-la")
+    private WebElement logo;
 
     public ResultPage(WebDriver driver) {
         super(driver);
@@ -48,23 +50,35 @@ public class ResultPage extends BasePage{
             String selectedName = checkBox.getName();
             if (selectedName.contains(name)) {
                 checkBox.clickCheckbox();
-                checkElement(checkBoxes.get(i), 5);
+                isElementDisplayed(checkBoxes.get(i));
             }
         }
     }
 
-    public void addProductsToCart(Integer quantity) throws NotClickedException, InterruptedException {
-        for (int i = 0; i <quantity; i++) {
-            int j = (int) (Math.random()*60);
-            ResultBlock resultBlock = new ResultBlock(resultBlocks.get(j));
+    public HomePage addProductsToCart(Integer quantity) {
+
+        for (int i = 0; i < quantity; i++) {
+            ResultPage resultPage = new ResultPage(driver);
+            int j = (int) (Math.random() * 60);
+            ResultBlock resultBlock = new ResultBlock(resultPage.resultBlocks.get(j));
             resultBlock.clickProduct();
             ProductPage productPage = switchToProductPage();
-            productPage.addToCart();
+            int notAdded = productPage.addToCart();
+            if (notAdded == 0) {
+                i--;
+            }
+
         }
+        clickLogo();
+        return new HomePage(driver);
     }
 
     public ProductPage switchToProductPage() {
             switchToWindow();
             return new ProductPage(driver);
+    }
+
+    public void clickLogo() {
+        elementClick(logo,5);
     }
 }

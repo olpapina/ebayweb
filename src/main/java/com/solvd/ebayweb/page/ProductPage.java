@@ -1,14 +1,13 @@
 package com.solvd.ebayweb.page;
 
 import com.solvd.ebayweb.component.FeatureBlock;
-import com.solvd.ebayweb.exception.NotClickedException;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
 
-public class ProductPage extends BasePage{
+public class ProductPage extends BasePage {
 
-    @FindBy(css = ".x-msku" )
+    @FindBy(xpath = "//*[contains(@class, 'x-msku') and contains(@class,'vim')]")
     WebElement featureBlock;
 
     @FindBy(css = "#qtyTextBox")
@@ -23,14 +22,24 @@ public class ProductPage extends BasePage{
         super(driver);
     }
 
-    public void addToCart() throws NotClickedException, InterruptedException {
-        if (checkElement(featureBlock, 5)) {
+    public int addToCart() {
+        if (isElementDisplayed(featureBlock)) {
             FeatureBlock feature = new FeatureBlock(featureBlock);
             feature.selectFeature();
-            elementClick(addToCartButton, 5);
-            PopUpProductPage productPage = new PopUpProductPage(driver);
-            productPage.clickSeeAllButton();
         }
-        new ProductPage(driver);
+        if (isElementDisplayed(addToCartButton)) {
+            PopUpProductPage popUpProductPage = clickAddToCardButton();
+            popUpProductPage.clickCloseButton();
+            switchToWindow();
+            return 1;
+        } else {
+            switchToWindow();
+            return 0;
+        }
+    }
+
+    public PopUpProductPage clickAddToCardButton() {
+        elementClick(addToCartButton, 5);
+        return new PopUpProductPage(driver);
     }
 }

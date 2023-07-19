@@ -58,7 +58,7 @@ public abstract class AbstractTest {
             takeSnapShot(webDriver.get(), ConfigFileReader.getData("screenShotsPath"));
             throw new IOException(result.getName()+ " is failed");
         }
-        webDriver.get().close();
+        webDriver.get().quit();
     }
 
     public WebDriver getWebdriver() {

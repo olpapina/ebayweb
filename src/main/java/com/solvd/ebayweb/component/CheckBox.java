@@ -3,7 +3,7 @@ package com.solvd.ebayweb.component;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebElement;
 
-public class CheckBox extends BaseComponent{
+public class CheckBox extends BaseComponent {
 
     public CheckBox(WebElement root) {
         super(root);
@@ -13,7 +13,7 @@ public class CheckBox extends BaseComponent{
         return root.findElement(By.className("x-refine__multi-select-cbx")).getText();
     }
 
-    public void  clickCheckbox() {
+    public void clickCheckbox() {
         root.click();
     }
 }

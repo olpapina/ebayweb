@@ -1,6 +1,5 @@
 package com.solvd.ebayweb.component;
 
-import com.solvd.ebayweb.exception.NotClickedException;
 import com.solvd.ebayweb.page.BasePage;
 import com.solvd.ebayweb.page.ResultPage;
 import org.openqa.selenium.By;
@@ -26,12 +25,12 @@ public class SearchBlock extends BasePage {
         typeText(searchField, text, 5);
     }
 
-    public ResultPage clickSearchButton() throws NotClickedException {
+    public ResultPage clickSearchButton() {
         elementClick(searchButton, 5);
         return new ResultPage(driver);
     }
 
-    public void selectSearchCategory(String text) throws NotClickedException {
+    public void selectSearchCategory(String text) {
         elementClick(searchCategory, 5);
         driver.findElement(By.xpath("//*[@id='gh-cat-box']//*[contains(text()," + text + ")]")).click();
     }

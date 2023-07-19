@@ -1,12 +1,8 @@
 package com.solvd.ebayweb.page;
 
-import com.solvd.ebayweb.exception.NotClickedException;
 import org.apache.logging.log4j.LogManager;
-import org.openqa.selenium.By;
-import org.openqa.selenium.InvalidSelectorException;
-import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.*;
 import org.apache.logging.log4j.Logger;
-import org.openqa.selenium.WebElement;
 import org.openqa.selenium.interactions.Actions;
 import org.openqa.selenium.support.PageFactory;
 import org.openqa.selenium.support.ui.ExpectedConditions;
@@ -26,17 +22,19 @@ public abstract class BasePage {
     }
 
     public void waitItsClickable(WebElement webElement, long second) {
-        new WebDriverWait(this.driver, Duration.ofSeconds(second))
-                .until(ExpectedConditions.elementToBeClickable(webElement));
+        try {
+            new WebDriverWait(this.driver, Duration.ofSeconds(second))
+                    .until(ExpectedConditions.elementToBeClickable(webElement));
+        } catch (NoSuchElementException e) {
+            LOGGER.error("Element is not present on the page");
+        }
     }
 
-    public void elementClick(WebElement webElement, long second) throws NotClickedException, InvalidSelectorException {
+    public void elementClick(WebElement webElement, long second) {
         waitItsClickable(webElement, second);
         if (webElement.isDisplayed()) {
-            webElement.click();
             LOGGER.info(webElement.getTagName() + " is clicked");
-        } else {
-            throw new NotClickedException(webElement.getTagName() + " is not clicked");
+            webElement.click();
         }
     }
 
@@ -47,6 +45,7 @@ public abstract class BasePage {
     }
 
     public String getElementText(WebElement webElement) {
+        waitItsClickable(webElement, 5);
         return webElement.getText();
     }
 
@@ -55,26 +54,18 @@ public abstract class BasePage {
                 .until(ExpectedConditions.titleIs(title));
     }
 
-    public Boolean checkElement(WebElement webElement, long second) {
-        waitItsClickable(webElement, second);
-        if (webElement.isDisplayed()) {
+    public boolean isElementDisplayed(WebElement webElement) {
+        try {
+            webElement.isDisplayed();
             LOGGER.info(webElement.getTagName() + " is present on the page");
             return true;
-        } else {
-            LOGGER.info(webElement.getTagName() + " is not present on the page");
+        } catch (NoSuchElementException e) {
+            LOGGER.error("Element is not present on the page");
             return false;
         }
     }
 
-    public void clickCoordinates(WebElement webElement, long second, Integer x, Integer y) {
-        waitItsClickable(webElement, second);
-        WebElement ele = driver.findElement(By.xpath(String.valueOf(webElement)));
-        Actions action = new Actions(driver);
-        action.moveToElement(ele, x, y).click().build().perform();
-    }
-
     public void scrollToElement(WebElement webElement) {
-        WebElement ele = driver.findElement(By.xpath(String.valueOf(webElement)));
         Actions action = new Actions(driver);
         action.scrollToElement(webElement).perform();
     }
@@ -85,13 +76,20 @@ public abstract class BasePage {
         Iterator<String> iterator = windowHandles.iterator();
         while (iterator.hasNext()) {
             String childWindow = iterator.next();
-            if (!parentWindow.equalsIgnoreCase(childWindow)) {
-                driver.switchTo().window(childWindow);
+            if (windowHandles.size() < 3) {
+                if (!parentWindow.equalsIgnoreCase(childWindow)) {
+                    driver.switchTo().window(childWindow);
+                    break;
+                }
+            } else {
+                iterator.hasNext();
+                String secondChildWindow = iterator.next();
+                String thirdChildWindow = iterator.next();
+                driver.switchTo().window(secondChildWindow);
+                driver.close();
+                windowHandles.remove(secondChildWindow);
+                driver.switchTo().window(thirdChildWindow);
             }
         }
-    }
-
-    public void clearField(WebElement webElement) {
-        webElement.clear();
     }
 }

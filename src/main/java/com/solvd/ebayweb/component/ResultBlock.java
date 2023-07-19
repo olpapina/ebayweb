@@ -18,8 +18,8 @@ public class ResultBlock extends BaseComponent {
 
     public BigDecimal getPrice() {
         String price = root.findElement(By.className("s-item__price"))
-                        .getText()
-                        .replace("$", "");
+                .getText()
+                .replace("$", "");
         String el = price.contains(" ") ? price.split(" ")[0] : price;
         return new BigDecimal(el).setScale(2, RoundingMode.UNNECESSARY);
     }

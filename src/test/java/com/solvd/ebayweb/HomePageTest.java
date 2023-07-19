@@ -1,7 +1,6 @@
 package com.solvd.ebayweb;
 
 import com.solvd.ebayweb.component.DropDownMenu;
-import com.solvd.ebayweb.exception.NotClickedException;
 import com.solvd.ebayweb.page.HomePage;
 import com.solvd.ebayweb.page.OtherVehiclesPage;
 import org.testng.Assert;
@@ -31,14 +30,14 @@ public class HomePageTest extends AbstractTest {
     }
 
     @Test(testName = "verify that cookies will be accepted")
-    public void verifyAcceptCookieTest() throws NotClickedException {
+    public void verifyAcceptCookieTest() {
         HomePage homePage = new HomePage(getWebdriver());
         homePage.clickAccessAllButton();
         Assert.assertTrue(homePage.isClicked(), "Accept All button is not clicked");
     }
 
     @Test(testName = "verify redirect to Other Vehicles & Trailers page", dataProvider = "vehiclesTitleText")
-    public void verifyRedirectToOtherVehiclesTest(String vehiclesTitle) throws NotClickedException {
+    public void verifyRedirectToOtherVehiclesTest(String vehiclesTitle) {
         HomePage homePage = new HomePage(getWebdriver());
         homePage.clickAccessAllButton();
         DropDownMenu dropDownMenu = homePage.clickShopByCategory();
