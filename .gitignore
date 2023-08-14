@@ -1,5 +1,5 @@
 .idea
 target/
-log
-screenshots
 .DS_Store
+log/
+screenshots/
